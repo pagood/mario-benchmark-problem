@@ -121,10 +121,12 @@ class Node implements Comparable<Node>{
     public boolean stopMove(){
         boolean[] t = {false,true,false,false,false};
         boolean[] t2 = {false,true,false,true,false};
-        if(Arrays.equals(t,worldstate.mario.keys)){
+        boolean[] t3 = {false,true,false,false,true};
+        boolean[] t4 = {false,true,false,true,true};
+        if(Arrays.equals(t,worldstate.mario.keys) || Arrays.equals(t3,worldstate.mario.keys)){
             if(worldstate.mario.xa < 0.7f){
                 if(!worldstate.mario.isOnGround() && worldstate.mario.jumpTime == 0){
-                    if(parent != null && Arrays.equals(parent.worldstate.mario.keys,t2)){
+                    if(parent != null && (Arrays.equals(parent.worldstate.mario.keys,t2) || Arrays.equals(parent.worldstate.mario.keys,t4))){
                         return true;
                     }
                     else{

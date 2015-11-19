@@ -178,6 +178,7 @@ class Node implements Comparable<Node>{
             Node node4 = new Node(this.depth + 1, this, fjsCopy,forwardJumpSpeed);
             node4.advance();
             children.add(node4);
+            
 //            jump
 //            boolean[] jump = createAction(true, false, false, false, false);
 //            LevelScene jumpCopy = getStateCopy();
