@@ -149,17 +149,16 @@ class Node implements Comparable<Node>{
     }
     public void generateChild(){
         children = new ArrayList<Node>();
-        //jump forward
-
+        //acc forward
+        boolean[] forwardSpeed = createAction(false, false, false, true, true);
+        LevelScene fsCopy = getStateCopy();
+        children.add(new Node(this.depth + 1,this,fsCopy,forwardSpeed));
 
         //forward
         boolean[] forward = createAction(false, false, false, true, false);
         LevelScene forwardCopy = getStateCopy();
         children.add(new Node(this.depth + 1,this,forwardCopy,forward));
-        //acc forward
-//        boolean[] forwardSpeed = createAction(false, false, false, true, true);
-//        LevelScene fsCopy = getStateCopy();
-//        children.add(new Node(this.depth + 1,this,fsCopy,forwardSpeed));
+
 
         if(worldstate.mario.mayJump() || worldstate.mario.jumpTime > 0) {
             //can jump higher
@@ -167,9 +166,9 @@ class Node implements Comparable<Node>{
             LevelScene jfCopy = getStateCopy();
             children.add(new Node(this.depth + 1, this, jfCopy,jumpForward));
             //acc jump forward
-//            boolean[] forwardJumpSpeed = createAction(true, false, false, true, true);
-//            LevelScene fjsCopy = getStateCopy();
-//            children.add(new Node(this.depth + 1, this, fjsCopy,forwardJumpSpeed));
+            boolean[] forwardJumpSpeed = createAction(true, false, false, true, true);
+            LevelScene fjsCopy = getStateCopy();
+            children.add(new Node(this.depth + 1, this, fjsCopy,forwardJumpSpeed));
             //jump
 //            boolean[] jump = createAction(true, false, false, false, false);
 //            LevelScene jumpCopy = getStateCopy();

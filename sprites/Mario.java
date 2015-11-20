@@ -113,7 +113,7 @@ public class Mario extends competition.cig.yuxiao.sprites.Sprite implements Clon
         y = 0;
 
         facing = 1;
-        setLarge(true, false);
+        setLarge(true, true);
     }
 
 

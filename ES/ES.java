@@ -38,12 +38,14 @@ public class ES {
     public boolean[] search(){
         boolean[] action = new boolean[4];
         Random random = new Random();
+        // to pop best
         max = new PriorityQueue<Individual>(new Comparator<Individual>() {
             @Override
             public int compare(Individual o1, Individual o2) {
                 return -(Float.compare(o1.fitness,o2.fitness));
             }
         });
+        //to pop worst
         min = new PriorityQueue<Individual>(new Comparator<Individual>() {
             @Override
             public int compare(Individual o1, Individual o2) {
@@ -55,8 +57,8 @@ public class ES {
         for(int i = 0;i < POPULATION_NUMBER;i ++){
             LevelScene copy = getStateCopy();
             Individual individual = new Individual(copy);
-            max.add(individual);// pop best
-            min.add(individual);// pop worst
+            max.add(individual);
+            min.add(individual);
 //            population.add(individual);
         }
         //
@@ -64,7 +66,7 @@ public class ES {
             for(int j = 0;j < 5;j ++){
                 Individual temp = max.poll();
                 //mutate
-                int mutation = random.nextInt(30);
+                int mutation = random.nextInt(50);
                 Individual offspring = new Individual(temp,mutation);
                 max.add(temp);
 
@@ -100,7 +102,7 @@ class Individual{
     Action[] actions;
     float start;
     int damge;
-    final int STEP_NUMBER = 30;
+    final int STEP_NUMBER = 50;
     public Individual(LevelScene worldState){
         this.worldState = worldState;
         this.oriState = worldState;
@@ -118,8 +120,9 @@ class Individual{
         this.oriState = parent.oriState;
         this.start = oriState.mario.x;
         this.damge = oriState.mario.damage;
+        actions = new Action[STEP_NUMBER];
         for(int i = 0;i < STEP_NUMBER;i ++){
-            actions[i] = new Action(parent.actions[0].getNumber());
+            actions[i] = new Action(parent.actions[i].getNumber());
         }
         actions[mutation].mutate();
         evaluate();
@@ -134,10 +137,10 @@ class Individual{
     public void evaluate(){
         advance();
         if(worldState.mario.status == worldState.mario.STATUS_DEAD){
-            fitness = -1;
+            fitness = Float.MIN_VALUE;
         }
         else{
-            fitness = (worldState.mario.x - start) - 10 * (worldState.mario.damage - this.damge);
+            fitness = (worldState.mario.x - start) - 150 * (worldState.mario.damage - this.damge);
         }
 
     }
