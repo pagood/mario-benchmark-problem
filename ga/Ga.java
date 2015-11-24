@@ -177,7 +177,7 @@ class Individual{
             fitness = Float.MIN_VALUE;
         }
         else{
-            fitness = (worldState.mario.x - start) - 150 * (worldState.mario.damage - this.damge);
+            fitness = (worldState.mario.x - start) - 100 * (worldState.mario.damage - this.damge);
         }
 
     }
