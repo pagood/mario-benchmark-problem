@@ -33,6 +33,13 @@ dir
 
 add
 
+Instance.java
+file
+
+
+
+add
+
 Iterativedeepening
 dir
 
@@ -75,7 +82,21 @@ dir
 
 add
 
+perceptrons
+dir
+
+
+
+add
+
 sprites
+dir
+
+
+
+add
+
+util
 dir
 
 

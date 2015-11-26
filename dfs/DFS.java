@@ -66,7 +66,7 @@ public class DFS {
         boolean[] t2 = {false,true,false,false,false};
         //if not path found keep running
         if(path.size() < 1) return node.worldstate.mario.mayJump() || node.worldstate.mario.jumpTime > 0 ? t : t2;
-        System.out.println(currentState.mario.onGround);
+//        System.out.println(currentState.mario.onGround);
         return path.get(0).action;
     }
     public List<Node> getPath(Node node){
@@ -150,9 +150,9 @@ class Node implements Comparable<Node>{
     public void generateChild(){
         children = new ArrayList<Node>();
         //acc forward
-        boolean[] forwardSpeed = createAction(false, false, false, true, true);
-        LevelScene fsCopy = getStateCopy();
-        children.add(new Node(this.depth + 1,this,fsCopy,forwardSpeed));
+//        boolean[] forwardSpeed = createAction(false, false, false, true, true);
+//        LevelScene fsCopy = getStateCopy();
+//        children.add(new Node(this.depth + 1,this,fsCopy,forwardSpeed));
 
         //forward
         boolean[] forward = createAction(false, false, false, true, false);
@@ -166,9 +166,9 @@ class Node implements Comparable<Node>{
             LevelScene jfCopy = getStateCopy();
             children.add(new Node(this.depth + 1, this, jfCopy,jumpForward));
             //acc jump forward
-            boolean[] forwardJumpSpeed = createAction(true, false, false, true, true);
-            LevelScene fjsCopy = getStateCopy();
-            children.add(new Node(this.depth + 1, this, fjsCopy,forwardJumpSpeed));
+//            boolean[] forwardJumpSpeed = createAction(true, false, false, true, true);
+//            LevelScene fjsCopy = getStateCopy();
+//            children.add(new Node(this.depth + 1, this, fjsCopy,forwardJumpSpeed));
             //jump
 //            boolean[] jump = createAction(true, false, false, false, false);
 //            LevelScene jumpCopy = getStateCopy();
