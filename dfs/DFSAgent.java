@@ -20,6 +20,7 @@ public class DFSAgent implements Agent{
     private boolean[] action;
     private float lastX = 0;
     private float lastY = 0;
+    private int counter = 0;
     DataOutputStream dos;
 
     @Override
@@ -58,20 +59,23 @@ public class DFSAgent implements Agent{
         byte[][] levelScene = observation.getCompleteObservation(/*1, 0*/);
         int c = 0;
         Instance instance = new Instance();
-        for(int i = 10;i < 12;i ++ ){
-            for(int j = 10;j < 12;j ++){
+        for(int i = 10;i <= 12;i ++ ){
+            for(int j = 10;j <= 12;j ++){
                 if(i == 11 && j == 11) continue;
-                instance.getFeature()[c] = levelScene[i][j] == 0 ? 0 : 1;
+//                instance.getFeature()[c] = levelScene[i][j] == 0 ? "0" : "1";
+                instance.assignFeature(c,levelScene[i][j] == 0 ? "0" : "1");
                 c ++;
             }
         }
-        instance.setTarget(action[3] ? 1 : 0);
+        instance.setTarget(action[3] ? "1" : "-1");
         JSONObject jsonObject = JsonHelper.toJSON(instance);
         try {
-            System.out.println("write");
+            System.out.println(++counter);
 
 //            DataOutputStream dos = new DataOutputStream(new FileOutputStream("/Users/xiaoyu/Desktop/trainingset.txt"));
-            dos.writeUTF(jsonObject.toString());
+//            dos.writeUTF(jsonObject.toString());
+            dos.write(jsonObject.toString().getBytes());
+            dos.writeUTF("\n");
             dos.flush();
 //            dos.close();
         } catch (IOException e) {
