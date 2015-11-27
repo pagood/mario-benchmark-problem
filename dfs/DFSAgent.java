@@ -14,6 +14,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+
+import java.util.HashSet;
+
 /**
  * Created by xiaoyu on 11/2/15.
  */
@@ -26,11 +29,12 @@ public class DFSAgent implements Agent{
     private int counter = 0;
     private DataOutputStream dos;
     private LevelScene world;
+    private HashSet<Instance> set;
 
 
     @Override
     public void reset() {
-
+        set = new HashSet<Instance>();
         world = new LevelScene();
         world.init();
         world.level = new Level(1500,15);
@@ -39,7 +43,7 @@ public class DFSAgent implements Agent{
         dfs = new DFS();
         action = new boolean[5];
         try {
-            dos = new DataOutputStream(new FileOutputStream("/Users/xiaoyu/Desktop/trainingset.txt"));
+            dos = new DataOutputStream(new FileOutputStream("/Users/xiaoyu/Desktop/trainingset1.txt"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -71,6 +75,8 @@ public class DFSAgent implements Agent{
         //////////////////////////
         //save training set data//
         //////////////////////////
+//        HashSet<Instance> set = new HashSet<Instance>();
+
         byte[][] levelScene = observation.getCompleteObservation(/*1, 0*/);
 //        System.out.println(levelScene[11][12]);
         int c = 0;
@@ -85,22 +91,25 @@ public class DFSAgent implements Agent{
         }
         instance.assignFeature(c,world.mario.mayJump() || world.mario.jumpTime > 0 ? "1" : "0");
         instance.setTarget(action[3] ? "1" : "-1");
+
         JSONObject jsonObject = JsonHelper.toJSON(instance);
-        try {
+        if(!set.contains(instance)) {
+            set.add(instance);
+            try {
 //            System.out.println(++counter);
 
-//            DataOutputStream dos = new DataOutputStream(new FileOutputStream("/Users/xiaoyu/Desktop/trainingset.txt"));
+//            DataOutputStream dos = new DataOutputStream(new FileOutputStream("/Users/xiaoyu/Desktop/trainingset1.txt"));
 //            dos.writeUTF(jsonObject.toString());
-            dos.write(jsonObject.toString().getBytes());
-            dos.writeUTF("\n");
-            dos.flush();
+                dos.write(jsonObject.toString().getBytes());
+                dos.writeUTF("\n");
+                dos.flush();
 //            dos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-
-        System.out.println(world.mario.mayJump());
+        System.out.println(world.mario.mayJump() || world.mario.jumpTime > 0);
 
         return action;
     }

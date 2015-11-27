@@ -52,16 +52,16 @@ public class Perceptron {
             e.printStackTrace();
         }
 //        System.out.println(trainingSet.size());
-//        train(trainingSet);
+        train(trainingSet);
 
 
-        bias = -1;
-        weight = new double[]{0, 0, 0, 0, 2, 0, 0, 0, 0};
+//        bias = -1;
+//        weight = new double[]{0, 0, 0, 0, 2, 0, 0, 0, 0};
 
-//        System.out.println(bias);
-//        for(int i = 0;i < weight.length;i ++){
-//            System.out.println(weight[i]);
-//        }
+        System.out.println(bias);
+        for(int i = 0;i < weight.length;i ++){
+            System.out.println(weight[i]);
+        }
     }
 
     public void train(List<Instance> trainingSet){
@@ -127,7 +127,7 @@ public class Perceptron {
         else{
             yo = -1;
         }
-        System.out.println(yo);
+
         boolean[] action = {false,true,false,false,false};
         action[3] = yo == 1 ? true : false;
 

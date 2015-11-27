@@ -2,6 +2,8 @@ package competition.cig.yuxiao.perceptrons;
 
 import ch.idsia.ai.agents.Agent;
 import ch.idsia.mario.environments.Environment;
+import competition.cig.yuxiao.level.Level;
+import competition.cig.yuxiao.level.LevelScene;
 
 /**
  * Created by xiaoyu on 11/26/15.
@@ -10,8 +12,15 @@ public class PerceptronsAgent implements Agent{
     private String name = "perceptronsAgent";
     private Perceptron perceptron;
     private boolean[] action;
+
+    private LevelScene world;
     @Override
     public void reset() {
+
+
+        world = new LevelScene();
+        world.init();
+        world.level = new Level(1500,15);
         perceptron = new Perceptron();
         action = new boolean[5];
 
@@ -19,6 +28,13 @@ public class PerceptronsAgent implements Agent{
 
     @Override
     public boolean[] getAction(Environment observation) {
+        world.mario.setKeys(action);
+        world.tick();
+
+        world.setLevelScene(observation.getLevelSceneObservationZ(0));
+        world.setEnemies(observation.getEnemiesFloatPos());
+        System.out.println(world.mario.mayJump() || world.mario.jumpTime > 0);
+
         int[] feature = new int[9];
         byte[][] levelScene = observation.getCompleteObservation(/*1, 0*/);
         int count = 0;
@@ -29,8 +45,9 @@ public class PerceptronsAgent implements Agent{
                 count ++;
             }
         }
-        feature[count] = 1;
-        return perceptron.getActions(feature);
+        feature[count] = (world.mario.mayJump() || world.mario.jumpTime > 0 )? 1 : 0;
+        action = perceptron.getActions(feature);
+        return action;
     }
 
     @Override

@@ -14,6 +14,42 @@ public class Instance {
     private String x; // 6
     private String c; // 7
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Instance)) return false;
+
+        Instance instance = (Instance) o;
+
+        if (a != null ? !a.equals(instance.a) : instance.a != null) return false;
+        if (c != null ? !c.equals(instance.c) : instance.c != null) return false;
+        if (d != null ? !d.equals(instance.d) : instance.d != null) return false;
+        if (e != null ? !e.equals(instance.e) : instance.e != null) return false;
+        if (q != null ? !q.equals(instance.q) : instance.q != null) return false;
+        if (s != null ? !s.equals(instance.s) : instance.s != null) return false;
+        if (target != null ? !target.equals(instance.target) : instance.target != null) return false;
+        if (w != null ? !w.equals(instance.w) : instance.w != null) return false;
+        if (x != null ? !x.equals(instance.x) : instance.x != null) return false;
+        if (z != null ? !z.equals(instance.z) : instance.z != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = target != null ? target.hashCode() : 0;
+        result = 31 * result + (q != null ? q.hashCode() : 0);
+        result = 31 * result + (w != null ? w.hashCode() : 0);
+        result = 31 * result + (e != null ? e.hashCode() : 0);
+        result = 31 * result + (a != null ? a.hashCode() : 0);
+        result = 31 * result + (d != null ? d.hashCode() : 0);
+        result = 31 * result + (z != null ? z.hashCode() : 0);
+        result = 31 * result + (x != null ? x.hashCode() : 0);
+        result = 31 * result + (c != null ? c.hashCode() : 0);
+        result = 31 * result + (s != null ? s.hashCode() : 0);
+        return result;
+    }
+
     private String s;
 
     public String getS() {
