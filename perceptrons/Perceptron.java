@@ -19,13 +19,13 @@ public class Perceptron {
     private double theta;
 
     public Perceptron(){
-        weight = new double[8];
+        weight = new double[9];
         bias = 0;
         alpha = 1;
         theta = 0.2;
         List<Instance> trainingSet = new ArrayList<Instance>();
         try {
-            DataInputStream dis = new DataInputStream(new FileInputStream("/Users/xiaoyu/Desktop/trainingset1.txt"));
+            DataInputStream dis = new DataInputStream(new FileInputStream("/Users/xiaoyu/Desktop/trainingset.txt"));
             int ch = 0;
             StringBuffer sb = new StringBuffer();
             while((ch = dis.read()) != -1){
@@ -51,12 +51,17 @@ public class Perceptron {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(trainingSet.size());
-        train(trainingSet);
-        System.out.println(bias);
-        for(int i = 0;i < weight.length;i ++){
-            System.out.println(weight[i]);
-        }
+//        System.out.println(trainingSet.size());
+//        train(trainingSet);
+
+
+        bias = -1;
+        weight = new double[]{0, 0, 0, 0, 2, 0, 0, 0, 0};
+
+//        System.out.println(bias);
+//        for(int i = 0;i < weight.length;i ++){
+//            System.out.println(weight[i]);
+//        }
     }
 
     public void train(List<Instance> trainingSet){
@@ -93,8 +98,9 @@ public class Perceptron {
             test ++;
 //            System.out.println(test);
 
-            System.out.println("bias is " + bias);
-            System.out.println("weight is " + weight[0] +" " + weight[1] +" "+ weight[2]+" "+ weight[3]+" "+ weight[4]+" " + weight[5]+" "+ weight[6]+" " + weight[7]);
+            System.out.print("bias is " + bias);
+            System.out.print("weight is " + weight[0] + " " + weight[1] + " " + weight[2] + " " + weight[3] + " " + weight[4] + " " + weight[5] + " " + weight[6] + " " + weight[7]);
+            System.out.println("count is " + count);
         }
         System.out.println(test);
     }
@@ -105,7 +111,7 @@ public class Perceptron {
         }
         bias += alpha * Integer.valueOf(temp.getTarget());
     }
-    public boolean[] getAction(int[] feature){
+    public boolean[] getActions(int[] feature){
         int yi = 0;
         for(int i = 0;i < weight.length;i ++){
             yi += feature[i] * weight[i];
@@ -121,6 +127,7 @@ public class Perceptron {
         else{
             yo = -1;
         }
+        System.out.println(yo);
         boolean[] action = {false,true,false,false,false};
         action[3] = yo == 1 ? true : false;
 

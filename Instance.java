@@ -14,6 +14,16 @@ public class Instance {
     private String x; // 6
     private String c; // 7
 
+    private String s;
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        this.s = s;
+    }
+
     public String getQ() {
         return q;
     }
@@ -104,6 +114,9 @@ public class Instance {
             case 7:
                 setC(str);
                 break;
+            case 8:
+                setS(str);
+                break;
             default:
                 break;
         }
@@ -117,7 +130,7 @@ public class Instance {
     }
 
     public int[] generateFeature() {
-        int[] feature = new int[8];
+        int[] feature = new int[9];
         for(int i = 0;i < feature.length;i ++){
             switch (i){
                 case 0:
@@ -143,6 +156,9 @@ public class Instance {
                     break;
                 case 7:
                     feature[i] = Integer.valueOf(getC());
+                    break;
+                case 8:
+                    feature[i] = Integer.valueOf(getS());
                     break;
                 default:
                     break;

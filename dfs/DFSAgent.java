@@ -1,8 +1,11 @@
 package competition.cig.yuxiao.dfs;
 
 import ch.idsia.ai.agents.Agent;
+import ch.idsia.ai.agents.ai.ScaredAgent;
 import ch.idsia.mario.environments.Environment;
 import competition.cig.yuxiao.Instance;
+import competition.cig.yuxiao.level.Level;
+import competition.cig.yuxiao.level.LevelScene;
 import competition.cig.yuxiao.util.JsonHelper;
 import org.json.JSONObject;
 
@@ -21,10 +24,17 @@ public class DFSAgent implements Agent{
     private float lastX = 0;
     private float lastY = 0;
     private int counter = 0;
-    DataOutputStream dos;
+    private DataOutputStream dos;
+    private LevelScene world;
+
 
     @Override
     public void reset() {
+
+        world = new LevelScene();
+        world.init();
+        world.level = new Level(1500,15);
+
 
         dfs = new DFS();
         action = new boolean[5];
@@ -38,6 +48,8 @@ public class DFSAgent implements Agent{
 
     @Override
     public boolean[] getAction(Environment observation) {
+        world.mario.setKeys(action);
+        world.tick();
 
         dfs.advance(action);
         if(dfs.getCurrentState().mario.x != observation.getMarioFloatPos()[0] || dfs.getCurrentState().mario.y != observation.getMarioFloatPos()[1]){
@@ -50,6 +62,9 @@ public class DFSAgent implements Agent{
         }
         dfs.updateState(observation.getLevelSceneObservationZ(0),observation.getEnemiesFloatPos());
 
+        world.setLevelScene(observation.getLevelSceneObservationZ(0));
+        world.setEnemies(observation.getEnemiesFloatPos());
+
         lastX = observation.getMarioFloatPos()[0];
         lastY = observation.getMarioFloatPos()[1];
         action = dfs.search();
@@ -57,6 +72,7 @@ public class DFSAgent implements Agent{
         //save training set data//
         //////////////////////////
         byte[][] levelScene = observation.getCompleteObservation(/*1, 0*/);
+//        System.out.println(levelScene[11][12]);
         int c = 0;
         Instance instance = new Instance();
         for(int i = 10;i <= 12;i ++ ){
@@ -67,10 +83,11 @@ public class DFSAgent implements Agent{
                 c ++;
             }
         }
+        instance.assignFeature(c,world.mario.mayJump() || world.mario.jumpTime > 0 ? "1" : "0");
         instance.setTarget(action[3] ? "1" : "-1");
         JSONObject jsonObject = JsonHelper.toJSON(instance);
         try {
-            System.out.println(++counter);
+//            System.out.println(++counter);
 
 //            DataOutputStream dos = new DataOutputStream(new FileOutputStream("/Users/xiaoyu/Desktop/trainingset.txt"));
 //            dos.writeUTF(jsonObject.toString());
@@ -82,6 +99,8 @@ public class DFSAgent implements Agent{
             e.printStackTrace();
         }
 
+
+        System.out.println(world.mario.mayJump());
 
         return action;
     }
