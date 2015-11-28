@@ -123,6 +123,30 @@ public class Instance {
     public void setC(String c) {
         this.c = c;
     }
+    public String getAttribute(int i){
+        switch(i){
+            case 0:
+                return q;
+            case 1:
+                return w;
+            case 2:
+                return e;
+            case 3:
+                return a;
+            case 4:
+                return d;
+            case 5:
+                return z;
+            case 6:
+                return x;
+            case 7:
+                return c;
+            case 8:
+                return s;
+            default:
+                return "";
+        }
+    }
 
     public void assignFeature(int i,String str){
         switch (i){

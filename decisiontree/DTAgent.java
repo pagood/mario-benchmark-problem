@@ -1,4 +1,4 @@
-package competition.cig.yuxiao.perceptrons;
+package competition.cig.yuxiao.decisiontree;
 
 import ch.idsia.ai.agents.Agent;
 import ch.idsia.mario.environments.Environment;
@@ -6,13 +6,12 @@ import competition.cig.yuxiao.level.Level;
 import competition.cig.yuxiao.level.LevelScene;
 
 /**
- * Created by xiaoyu on 11/26/15.
+ * Created by xiaoyu on 11/28/15.
  */
-public class PerceptronsAgent implements Agent{
-    private String name = "perceptronsAgent";
-    private Perceptron perceptron;
+public class DTAgent implements Agent{
+    private String name = "decisionTreeAgent";
+    private DecisionTree decisionTree;
     private boolean[] action;
-
     private LevelScene world;
     @Override
     public void reset() {
@@ -21,7 +20,7 @@ public class PerceptronsAgent implements Agent{
         world = new LevelScene();
         world.init();
         world.level = new Level(1500,15);
-        perceptron = new Perceptron();
+        decisionTree = new DecisionTree();
         action = new boolean[5];
 
     }
@@ -49,7 +48,7 @@ public class PerceptronsAgent implements Agent{
         }
         System.out.println();
         feature[count] = (world.mario.mayJump() || world.mario.jumpTime > 0 )? 1 : 0;
-        action = perceptron.getActions(feature);
+        action = decisionTree.search(feature);
         return action;
     }
 
