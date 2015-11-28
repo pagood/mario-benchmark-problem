@@ -3,11 +3,13 @@ package competition.cig.yuxiao.dfs;
 import ch.idsia.ai.agents.Agent;
 import ch.idsia.ai.agents.ai.ScaredAgent;
 import ch.idsia.mario.environments.Environment;
+import competition.cig.yuxiao.InsTest;
 import competition.cig.yuxiao.Instance;
 import competition.cig.yuxiao.level.Level;
 import competition.cig.yuxiao.level.LevelScene;
 import competition.cig.yuxiao.util.JsonHelper;
 import org.json.JSONObject;
+import sun.jvm.hotspot.debugger.posix.elf.ELFSectionHeader;
 
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
@@ -29,12 +31,12 @@ public class DFSAgent implements Agent{
     private int counter = 0;
     private DataOutputStream dos;
     private LevelScene world;
-    private HashSet<Instance> set;
+    private HashSet<InsTest> set;
 
 
     @Override
     public void reset() {
-        set = new HashSet<Instance>();
+        set = new HashSet<InsTest>();
         world = new LevelScene();
         world.init();
         world.level = new Level(1500,15);
@@ -43,7 +45,7 @@ public class DFSAgent implements Agent{
         dfs = new DFS();
         action = new boolean[5];
         try {
-            dos = new DataOutputStream(new FileOutputStream("/Users/xiaoyu/Desktop/trainingset1.txt"));
+            dos = new DataOutputStream(new FileOutputStream("/Users/xiaoyu/Desktop/trainingset2.txt"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -78,18 +80,29 @@ public class DFSAgent implements Agent{
 //        HashSet<Instance> set = new HashSet<Instance>();
 
         byte[][] levelScene = observation.getCompleteObservation(/*1, 0*/);
+//        float mariox = observation.getMarioFloatPos()[0];
+//        float enemyx = posHelper(observation,mariox,observation.getMarioFloatPos()[1]);
 //        System.out.println(levelScene[11][12]);
         int c = 0;
-        Instance instance = new Instance();
+        int assign = 0;
+        InsTest instance = new InsTest();
         for(int i = 10;i <= 12;i ++ ){
             for(int j = 10;j <= 12;j ++){
                 if(i == 11 && j == 11) continue;
 //                instance.getFeature()[c] = levelScene[i][j] == 0 ? "0" : "1";
-                instance.assignFeature(c,levelScene[i][j] == 0 ? "0" : "1");
-                c ++;
+                if(c == 2 ||c == 4 ||c == 6 ||c == 7) {
+                    instance.assignFeature(assign, levelScene[i][j] == 0 ? "0" : "1");
+                    assign ++;
+                    c++;
+                }
+                else{
+                    c ++;
+                }
             }
         }
-        instance.assignFeature(c,world.mario.mayJump() || world.mario.jumpTime > 0 ? "1" : "0");
+        instance.assignFeature(assign,world.mario.mayJump() || world.mario.jumpTime > 0 ? "1" : "0");
+        assign ++;
+        instance.assignFeature(assign,levelScene[11][13] == 0 ? "0" : "1");
         instance.setTarget(action[3] ? "1" : "-1");
 
         JSONObject jsonObject = JsonHelper.toJSON(instance);
@@ -112,6 +125,24 @@ public class DFSAgent implements Agent{
         System.out.println(world.mario.mayJump() || world.mario.jumpTime > 0);
 
         return action;
+    }
+
+    private float posHelper(Environment observation,float x,float y) {
+        float[] enemies = observation.getEnemiesFloatPos();
+        float min = Float.MAX_VALUE;
+        if(enemies == null){
+            return Float.MAX_VALUE;
+        }
+        else{
+            for(int i = 1;i < enemies.length;i = i + 3){
+                if(Float.compare(x,enemies[i]) < 0 && Float.compare(y,enemies[i + 1]) == 0){
+                    min = Math.min(min,enemies[i] - x);
+                }
+            }
+
+        }
+        return min;
+
     }
 
     @Override

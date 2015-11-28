@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
+
+import competition.cig.yuxiao.InsTest;
 import competition.cig.yuxiao.Instance;
 import competition.cig.yuxiao.util.JsonHelper;
 import org.json.JSONException;
@@ -19,20 +21,20 @@ public class Perceptron {
     private double theta;
 
     public Perceptron(){
-        weight = new double[9];
+        weight = new double[6];
         bias = 0;
         alpha = 1;
         theta = 0.2;
-        List<Instance> trainingSet = new ArrayList<Instance>();
+        List<InsTest> trainingSet = new ArrayList<InsTest>();
         try {
-            DataInputStream dis = new DataInputStream(new FileInputStream("/Users/xiaoyu/Desktop/trainingset.txt"));
+            DataInputStream dis = new DataInputStream(new FileInputStream("/Users/xiaoyu/Desktop/trainingset2.txt"));
             int ch = 0;
             StringBuffer sb = new StringBuffer();
             while((ch = dis.read()) != -1){
                 if(ch == '\n'){
                     String jsonString = sb.toString();
                     sb.delete(0,sb.length());
-                    Instance temp = new Instance();
+                    InsTest temp = new InsTest();
                     JsonHelper.toJavaBean(temp, jsonString);
                     trainingSet.add(temp);
                 }
@@ -64,13 +66,13 @@ public class Perceptron {
         }
     }
 
-    public void train(List<Instance> trainingSet){
+    public void train(List<InsTest> trainingSet){
         int count = 0;
         int j = 0;
         int test = 0;
         while(count != trainingSet.size()){
             j = j % trainingSet.size();
-            Instance temp = trainingSet.get(j);
+            InsTest temp = trainingSet.get(j);
             int[] feature = temp.generateFeature();
             int yi = 0;
             for(int i = 0;i < weight.length;i ++){
@@ -96,15 +98,13 @@ public class Perceptron {
             }
             j ++;
             test ++;
-//            System.out.println(test);
+            System.out.println(test);
 
-            System.out.print("bias is " + bias);
-            System.out.print("weight is " + weight[0] + " " + weight[1] + " " + weight[2] + " " + weight[3] + " " + weight[4] + " " + weight[5] + " " + weight[6] + " " + weight[7]);
-            System.out.println("count is " + count);
+
         }
         System.out.println(test);
     }
-    public void update(Instance temp){
+    public void update(InsTest temp){
         int[] feature = temp.generateFeature();
         for(int i = 0;i < weight.length;i ++){
             weight[i] = weight[i] + alpha * Integer.valueOf(temp.getTarget()) * feature[i];

@@ -14,6 +14,17 @@ public class Instance {
     private String x; // 6
     private String c; // 7
 
+
+    public String getDis() {
+        return dis;
+    }
+
+    public void setDis(String dis) {
+        this.dis = dis;
+    }
+
+    private String dis;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -31,7 +42,7 @@ public class Instance {
         if (w != null ? !w.equals(instance.w) : instance.w != null) return false;
         if (x != null ? !x.equals(instance.x) : instance.x != null) return false;
         if (z != null ? !z.equals(instance.z) : instance.z != null) return false;
-
+        if (dis != null ? !dis.equals(instance.dis) : instance.dis != null) return false;
         return true;
     }
 
@@ -47,6 +58,7 @@ public class Instance {
         result = 31 * result + (x != null ? x.hashCode() : 0);
         result = 31 * result + (c != null ? c.hashCode() : 0);
         result = 31 * result + (s != null ? s.hashCode() : 0);
+        result = 31 * result + (dis != null ? dis.hashCode() : 0);
         return result;
     }
 
@@ -143,6 +155,8 @@ public class Instance {
                 return c;
             case 8:
                 return s;
+            case 9:
+                return dis;
             default:
                 return "";
         }
@@ -177,6 +191,9 @@ public class Instance {
             case 8:
                 setS(str);
                 break;
+            case 9:
+                setDis(str);
+                break;
             default:
                 break;
         }
@@ -190,7 +207,7 @@ public class Instance {
     }
 
     public int[] generateFeature() {
-        int[] feature = new int[9];
+        int[] feature = new int[10];
         for(int i = 0;i < feature.length;i ++){
             switch (i){
                 case 0:
@@ -219,6 +236,9 @@ public class Instance {
                     break;
                 case 8:
                     feature[i] = Integer.valueOf(getS());
+                    break;
+                case 9:
+                    feature[i] = Integer.valueOf(getDis());
                     break;
                 default:
                     break;
