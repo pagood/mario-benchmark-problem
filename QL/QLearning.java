@@ -70,7 +70,7 @@ public class QLearning {
 //            }
 //        }
         System.out.println();
-        for(int i = 0;i < 200;i ++) {
+        for(int i = 0;i < 300;i ++) {
             Random random = new Random();
             LevelScene copy = getStateCopy(currentState);
             boolean[] action = {false, true, false, false, false};
