@@ -1,4 +1,5 @@
 package competition.cig.yuxiao.decisiontree;
+import competition.cig.yuxiao.InsTest;
 import competition.cig.yuxiao.Instance;
 import java.util.*;
 import java.io.DataInputStream;
@@ -15,7 +16,7 @@ public class DecisionTree {
     private Node root;
     //	List<Instance> traningSet;
     class Node{
-        int featureNum;// 0 - 7:the cells around mario 8: may jump
+        int featureNum;
         Node left;// sub examples whose featureNum value equals to 0
         Node right;//sub examples whose featureNum value doesnt equals to 0
         String target;//only leaf have
@@ -25,17 +26,17 @@ public class DecisionTree {
     }
 
     public DecisionTree(){
-        int[] attributes = new int[9];
-        List<Instance> trainingSet = new ArrayList<Instance>();
+        int[] attributes = new int[6];
+        List<InsTest> trainingSet = new ArrayList<InsTest>();
         try {
-            DataInputStream dis = new DataInputStream(new FileInputStream("/Users/xiaoyu/Desktop/trainingset.txt"));
+            DataInputStream dis = new DataInputStream(new FileInputStream("/Users/xiaoyu/Desktop/trainingset2 2.txt"));
             int ch = 0;
             StringBuffer sb = new StringBuffer();
             while((ch = dis.read()) != -1){
                 if(ch == '\n'){
                     String jsonString = sb.toString();
                     sb.delete(0,sb.length());
-                    Instance temp = new Instance();
+                    InsTest temp = new InsTest();
                     JsonHelper.toJavaBean(temp, jsonString);
                     trainingSet.add(temp);
                 }
@@ -57,7 +58,7 @@ public class DecisionTree {
         System.out.println(trainingSet.size());
         root = constructTree(trainingSet,attributes);
     }
-    public Node constructTree(List<Instance> trainingSet,int[] attributes){
+    public Node constructTree(List<InsTest> trainingSet,int[] attributes){
         System.out.println("once time");
         if(helper(trainingSet)){
             Node leaf = new Node(-1);
@@ -68,10 +69,10 @@ public class DecisionTree {
             int attribute = importance(trainingSet,attributes);
             attributes[attribute] = 1;
             Node root = new Node(attribute);
-            List<Instance> left = new ArrayList<>();// = 0
-            List<Instance> right = new ArrayList<>();// = 1
+            List<InsTest> left = new ArrayList<>();// = 0
+            List<InsTest> right = new ArrayList<>();// = 1
             for(int i = 0;i < trainingSet.size();i ++){
-                if(trainingSet.get(i).getAttribute(attribute).equals("0")){
+                if(trainingSet.get(i).Attribute(attribute).equals("0")){
                     left.add(trainingSet.get(i));
                 }
                 else{
@@ -83,8 +84,8 @@ public class DecisionTree {
             return root;
         }
     }
-    public boolean helper(List<Instance> examples){
-        Instance instance = examples.get(0);
+    public boolean helper(List<InsTest> examples){
+        InsTest instance = examples.get(0);
         String str = instance.getTarget();
         for(int i = 1;i < examples.size();i ++){
             if(!examples.get(i).getTarget().equals(str)) return false;
@@ -92,16 +93,16 @@ public class DecisionTree {
         return true;
     }
 
-    public int importance(List<Instance> examples,int[] attributes){
+    public int importance(List<InsTest> examples,int[] attributes){
         int importance = 0;
         double max = Double.MIN_VALUE;
         for(int i = 0;i < attributes.length;i ++){
             if(attributes[i] != 1){
                 //traversal the examples class by attributes i
-                List<Instance> n = new ArrayList<>();
-                List<Instance> p = new ArrayList<>();
+                List<InsTest> n = new ArrayList<>();
+                List<InsTest> p = new ArrayList<>();
                 for(int j = 0;j < examples.size();j ++){
-                    if(examples.get(j).getAttribute(i).equals("1")){
+                    if(examples.get(j).Attribute(i).equals("1")){
                         p.add(examples.get(j));
                     }
                     else{
@@ -124,7 +125,7 @@ public class DecisionTree {
         return importance;
 
     }
-    public double entropy(List<Instance> examples){
+    public double entropy(List<InsTest> examples){
         int a = 0;// target == 1
         int b = 0;// target == -1
         for(int i = 0;i < examples.size();i ++){
@@ -143,7 +144,7 @@ public class DecisionTree {
     }
     public boolean[] search(int[] feature){
         String str = rec(root,feature);
-        boolean[] action = {false,true,false,false,true};
+        boolean[] action = {false,true,false,false,false};
         action[3] = str.equals("1") ? true : false;
         return action;
     }

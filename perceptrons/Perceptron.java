@@ -27,7 +27,7 @@ public class Perceptron {
         theta = 0.2;
         List<InsTest> trainingSet = new ArrayList<InsTest>();
         try {
-            DataInputStream dis = new DataInputStream(new FileInputStream("/Users/xiaoyu/Desktop/trainingset2.txt"));
+            DataInputStream dis = new DataInputStream(new FileInputStream("/Users/xiaoyu/Desktop/trainingset2 2.txt"));
             int ch = 0;
             StringBuffer sb = new StringBuffer();
             while((ch = dis.read()) != -1){

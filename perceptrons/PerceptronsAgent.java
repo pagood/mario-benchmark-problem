@@ -63,7 +63,7 @@ public class PerceptronsAgent implements Agent{
         assign ++;
         feature[assign] = (levelScene[11][13] == -10 || levelScene[11][13] == -11 ||levelScene[11][13] == 20||levelScene[11][13] == 16||levelScene[11][13] == 21 || levelScene[11][13] == 0 )? 0 : 1;
         action = perceptron.getActions(feature);
-        System.out.println(DangerOfGap(levelScene));
+//        System.out.println(DangerOfGap(levelScene));
 
 //        System.out.println(world.mario.isOnGround());
         return action;
