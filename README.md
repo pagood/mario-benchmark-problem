@@ -8,6 +8,7 @@ goal state.
 - Implement supervised learning algorithm(perceptron,decision tree).
 - Implement Q-learning algorithm and come up with a way to simplify the implementation and make
 it can work for the path finding for game.
+
 How to get it to run:
 - Download the competition mario code from http://julian.togelius.com/mariocompetition2009/gettingstarted.php.
 - Put my Mario AI into the src/competition/cig/yuxiao/ folder
